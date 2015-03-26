@@ -30,7 +30,7 @@ import org.newdawn.slick.state.StateBasedGame;
  *
  * @author thomas
  */
-public class Laser extends Rectangle implements Updateable,CollideListener{
+public class Laser extends Rectangle implements Updateable,CollideListener,Destroyable{
 
     private static final float WIDTH=25,HEIGHT=5;
     private static final float MAX_DISTANCE = 1000;
@@ -136,7 +136,14 @@ public class Laser extends Rectangle implements Updateable,CollideListener{
     /**
      * @return the detruit
      */
+    @Override
     public boolean isDetruit() {
         return detruit;
+    }
+
+    @Override
+    public void detruire(Game gc) {
+        gc.removeCollideListener(this);
+        gc.removeObject((Laser) this);
     }
 }
