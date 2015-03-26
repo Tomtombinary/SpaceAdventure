@@ -151,6 +151,11 @@ public class Spaceship implements Updateable{
         return centerY;
     }
 
+    /**
+     * Méthode pour tirer
+     * @param gc 
+     *  Game container
+     */
     public void tirer(Game gc){
         laserEffect.playAsSoundEffect(1f,0.5f,false);
         Set keys = blocks.keySet();
@@ -163,6 +168,10 @@ public class Spaceship implements Updateable{
         }
     }
 
+    /**
+     * Méthode destruction du vaisseau
+     * @param gc 
+     */
     public void detruire(Game gc){
         if(!detruit){
             detruit = true;

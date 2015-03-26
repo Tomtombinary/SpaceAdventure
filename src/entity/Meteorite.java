@@ -31,6 +31,11 @@ public class Meteorite extends Rectangle implements Updateable,CollideListener{
     private float angleSpeed;
     private Vector2f vitesse;
     
+    /**
+     * Créer une météorite plus petite en fonction de la météorite passé en paramètre
+     * @param m 
+     *  météorite
+     */
     public Meteorite(Meteorite m){
         super(0,0,0,0);
         switch(m.type){
@@ -54,6 +59,15 @@ public class Meteorite extends Rectangle implements Updateable,CollideListener{
         this.vitesse = m.getVitesse();
     }
     
+    /**
+     * Créer un métorite avec pour centre x,y  type =  SMALL,MEDIUM,BIG
+     * @param x
+     *  centre x
+     * @param y
+     *  centre y
+     * @param type
+     *  type de météorite ou taille SMALL,MEDIUM,BIG
+     */
     public Meteorite(float x, float y,int type) {
         super(0,0,0,0);
         this.type  = type;
@@ -88,6 +102,10 @@ public class Meteorite extends Rectangle implements Updateable,CollideListener{
         return this.vitesse;
     }
     
+    /**
+     * Défini un nouveau vecteur vitesse (ou vecteur de direction) pour la météorite
+     * @param v 
+     */
     public void setVitesse(Vector2f v){
         this.vitesse = v;
     }
@@ -163,6 +181,14 @@ public class Meteorite extends Rectangle implements Updateable,CollideListener{
         return "Metorite : "+type+" pv : "+pv;
     }
     
+    /**
+     * Méthode de collision , si la météorite est touché par un laser , décremente ses PV
+     * si la météorite est détruite créer des debris .
+     * @param gc
+     *  Game container
+     * @param c 
+     *  Objet en collision avec la météorite
+     */
     @Override
     public void Collide(Game gc, CollideListener c) {
         if(this.pv>0){

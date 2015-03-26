@@ -6,7 +6,6 @@
 package entity;
 
 import game.Game;
-import org.newdawn.slick.geom.Point;
 import render.LaserRenderer;
 
 /**
@@ -50,6 +49,12 @@ public class Weapon extends Block{
         return "Block d'arme "+super.toString();
     }
     
+    /**
+     * Méthode de tir , ajoute un laser en fonction de la position du bloc et de son
+     * orientation
+     * @param gc 
+     *  Game container
+     */
     public void tirer(Game gc){
         if(source!=null){
             float lCenterX = center[0]-(float)(Math.sin(Math.toRadians(angle))*(-HEIGHT/2));

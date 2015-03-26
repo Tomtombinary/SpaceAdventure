@@ -28,7 +28,20 @@ public class Laser extends Rectangle implements Updateable,CollideListener{
     private Spaceship source;
     private float angle;
     private Vector2f vitesse;
-    
+   
+    /**
+     * Créer un laser avec les paramètres suivants
+     * @param x
+     *  centre x du laser
+     * @param y
+     *  centre y du laser
+     * @param angle
+     *  angle sert a calculer le vecteur de direction du laser
+     * @param speed
+     *  vitesse
+     * @param source 
+     *  vaisseau source
+     */
     public Laser(float x, float y, float angle,float speed,Spaceship source) {
         super(x-WIDTH/2,y-HEIGHT/2, WIDTH,HEIGHT);
         this.angle = angle;
