@@ -23,16 +23,12 @@ import entity.Meteorite;
 import entity.Reactor;
 import entity.Spaceship;
 import entity.Weapon;
-import java.io.IOException;
 import java.util.ArrayList;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Shape;
-import org.newdawn.slick.openal.Audio;
-import org.newdawn.slick.openal.AudioLoader;
 import org.newdawn.slick.state.*;
-import org.newdawn.slick.util.ResourceLoader;
 import render.EtoileRenderer;
 import render.MeteoriteRenderer;
 import render.Renderable;
@@ -44,34 +40,51 @@ import render.SpaceshipRenderer;
  */
 public class Game extends BasicGameState{
     
-    //private static Audio Theme;
+    private final ArrayList<Updateable>      objectsAddToUpdate = new ArrayList();
+    private final ArrayList<Renderable>      objectsAddToRender = new ArrayList();
+    private final ArrayList<CollideListener> addcollideListeners = new ArrayList();
     
-    private ArrayList<Updateable>  objectsAddToUpdate = new ArrayList<Updateable>();
-    private ArrayList<Renderable>  objectsAddToRender = new ArrayList<Renderable>();
+    private final ArrayList<Updateable> objectsSupToUpdate = new ArrayList();
+    private final ArrayList<Renderable>  objectsSupToRender = new ArrayList();
+    private final ArrayList<CollideListener> supcollideListeners   = new ArrayList();
     
-    private ArrayList<Updateable> objectsSupToUpdate = new ArrayList<Updateable>();
-    private ArrayList<Renderable>  objectsSupToRender = new ArrayList<Renderable>();
-    private ArrayList<CollideListener> supcollideListeners   = new ArrayList<CollideListener>();
+    private final ArrayList<Renderable>  objectsToRender    = new ArrayList();
+    private final ArrayList<Updateable>  objectsToUpdate    = new ArrayList();
+    private final ArrayList<CollideListener> collideListeners   = new ArrayList();
     
-    private ArrayList<Renderable>  objectsToRender    = new ArrayList<Renderable>();
-    private ArrayList<Updateable>  objectsToUpdate    = new ArrayList<Updateable>();
-    private ArrayList<CollideListener> collideListeners   = new ArrayList<CollideListener>();
-    
-    private Spaceship vaisseau = new Spaceship(400,300);
+    private final Spaceship player = new Spaceship(Window.WIDTH/2,Window.HEIGHT/2);
     
     @Override
     public int getID() {
         return States.GAME.getID();
     }
     
+    /**
+     * Prépare l'ajout d'un listener de colision,
+     * la méthode collide de l'objet sera appelé si celui ci est en 
+     * collision avec un autre objet de type CollideListener
+     * @param listener 
+     */
     public void addCollideListener(CollideListener listener){
-        this.collideListeners.add(listener);
+        this.addcollideListeners.add(listener);
     }
     
+    /**
+     * Supprime un listener de colision, la réference de celui-ci 
+     * est mis en attente dans une liste d'objet a supprimer
+     * @param listener 
+     */
     public void removeCollideListener(CollideListener listener){
         this.supcollideListeners.add(listener);
     }
     
+    /**
+     * Prépare l'ajout d'un nouvel objet
+     * @param u
+     *  L'objet a ajouter
+     * @param r 
+     *  Son renderer (si il n'est pas invisible)
+     */
     public void addNewObject(Updateable u,Renderable r){
         if(u!=null)
             objectsAddToUpdate.add(u);
@@ -79,6 +92,11 @@ public class Game extends BasicGameState{
             objectsAddToRender.add(r);
     }
     
+    /**
+     * Prépare la supression d'un objet (et de son renderer)
+     * @param u 
+     *  l'objet a supprimer
+     */
     public void removeObject(Updateable u){
         if(u!=null)
             objectsSupToUpdate.add(u);
@@ -102,28 +120,24 @@ public class Game extends BasicGameState{
             objectsToUpdate.add(u);
         for(Renderable r : objectsAddToRender)
             objectsToRender.add(r);
+        for(CollideListener c : addcollideListeners)
+            collideListeners.add(c);
         objectsAddToUpdate.clear();
         objectsAddToRender.clear();
+        addcollideListeners.clear();
     }
     
     @Override
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-        /*if(Theme==null){
-            try {
-                Theme = AudioLoader.getAudio("WAV",ResourceLoader.getResourceAsStream("res/Skyrim.wav"));
-            } catch (IOException ex) {
-                System.err.println(ex.getMessage());
-            }
-        }*/
-        vaisseau.addBlock(new Armor(),0,0);
-        vaisseau.addBlock(new Armor(),0,-1);
-        vaisseau.addBlock(new Armor(),0,1);
-        vaisseau.addBlock(new Weapon(),-1,1);
-        vaisseau.addBlock(new Weapon(),-1,-1);
-        vaisseau.addBlock(new Armor(),1,0);
-        vaisseau.addBlock(new Reactor(1f,10f),2,0);
-        vaisseau.addBlock(new Armor(),1,-1);
-        vaisseau.addBlock(new Armor(),1,1);
+        player.addBlock(new Armor(),0,0);
+        player.addBlock(new Armor(),0,-1);
+        player.addBlock(new Armor(),0,1);
+        player.addBlock(new Weapon(),-1,1);
+        player.addBlock(new Weapon(),-1,-1);
+        player.addBlock(new Armor(),1,0);
+        player.addBlock(new Reactor(1f,10f),2,0);
+        player.addBlock(new Armor(),1,-1);
+        player.addBlock(new Armor(),1,1);
         
         for(int i=0;i<100;i++){
             objectsToRender.add(new EtoileRenderer(
@@ -145,15 +159,14 @@ public class Game extends BasicGameState{
             collideListeners.add(meteor);
         }
         
-        objectsToRender.add(new SpaceshipRenderer(vaisseau));
-        objectsToUpdate.add(new Player(vaisseau));
-        objectsToUpdate.add(vaisseau);
-        //Theme.playAsMusic(1f, 1f, true);
+        objectsToRender.add(new SpaceshipRenderer(player));
+        objectsToUpdate.add(new Player(player));
+        objectsToUpdate.add(player);
     }
 
     @Override
     public void render(GameContainer gc, StateBasedGame sbg, Graphics grphcs) throws SlickException {
-        grphcs.translate(Window.WIDTH/2-vaisseau.getCenterX(),Window.HEIGHT/2-vaisseau.getCenterY());
+        grphcs.translate(Window.WIDTH/2-player.getCenterX(),Window.HEIGHT/2-player.getCenterY());
         for(Renderable r : objectsToRender)
             r.render(gc, sbg, grphcs);
     }
@@ -162,10 +175,8 @@ public class Game extends BasicGameState{
     public void update(GameContainer gc, StateBasedGame sbg, int i) throws SlickException {
         for(Updateable u : objectsToUpdate)
             u.update(gc, sbg, i);
-        for(int k=0;k<collideListeners.size();k++){
-            CollideListener c1 = collideListeners.get(k);
-            for(int l=0;l<collideListeners.size();l++){
-                CollideListener c2 = collideListeners.get(l);
+        for(CollideListener c1 : collideListeners){
+            for(CollideListener c2 : collideListeners){
                 if(c1!=c2 && c1.intersects((Shape)c2))
                     c1.Collide(this, c2);
             }
