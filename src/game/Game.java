@@ -42,11 +42,11 @@ public class Game extends BasicGameState{
     
     private final ArrayList<Updateable>      objectsAddToUpdate = new ArrayList();
     private final ArrayList<Renderable>      objectsAddToRender = new ArrayList();
-    private final ArrayList<CollideListener> addcollideListeners = new ArrayList();
+    private final ArrayList<CollideListener> addCollideListener = new ArrayList();
     
     private final ArrayList<Updateable> objectsSupToUpdate = new ArrayList();
     private final ArrayList<Renderable>  objectsSupToRender = new ArrayList();
-    private final ArrayList<CollideListener> supcollideListeners   = new ArrayList();
+    private final ArrayList<CollideListener> supCollideListener   = new ArrayList();
     
     private final ArrayList<Renderable>  objectsToRender    = new ArrayList();
     private final ArrayList<Updateable>  objectsToUpdate    = new ArrayList();
@@ -66,7 +66,7 @@ public class Game extends BasicGameState{
      * @param listener 
      */
     public void addCollideListener(CollideListener listener){
-        this.addcollideListeners.add(listener);
+        this.addCollideListener.add(listener);
     }
     
     /**
@@ -75,7 +75,7 @@ public class Game extends BasicGameState{
      * @param listener 
      */
     public void removeCollideListener(CollideListener listener){
-        this.supcollideListeners.add(listener);
+        this.supCollideListener.add(listener);
     }
     
     /**
@@ -111,7 +111,7 @@ public class Game extends BasicGameState{
             objectsToUpdate.remove(u);
         for(Renderable r : objectsSupToRender)
             objectsToRender.remove(r);
-        for(CollideListener l : supcollideListeners)
+        for(CollideListener l : supCollideListener)
             collideListeners.remove(l);
     }
     
@@ -120,11 +120,11 @@ public class Game extends BasicGameState{
             objectsToUpdate.add(u);
         for(Renderable r : objectsAddToRender)
             objectsToRender.add(r);
-        for(CollideListener c : addcollideListeners)
+        for(CollideListener c : addCollideListener)
             collideListeners.add(c);
         objectsAddToUpdate.clear();
         objectsAddToRender.clear();
-        addcollideListeners.clear();
+        addCollideListener.clear();
     }
     
     @Override
