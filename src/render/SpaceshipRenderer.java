@@ -47,9 +47,11 @@ public class SpaceshipRenderer implements Renderable{
         this.vaisseau = vaisseau;
         Set keys = vaisseau.getBlocks().keySet();
         Iterator it = keys.iterator();
+        //Boucle pour parcourir les blocks du vaisseau
         while(it.hasNext()){
             Point key = (Point)it.next();
             Block block = vaisseau.getBlocks().get(key);
+            //Associe a chaque block le blockRenderer correspondant
             if(block instanceof Armor)
                 blockRenderer.add(new ArmorRenderer((Armor)block));
             else if(block instanceof Weapon)
