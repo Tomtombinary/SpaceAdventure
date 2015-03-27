@@ -41,6 +41,12 @@ public abstract class BlockRenderer implements Renderable{
         return objectToRender;
     }
     
+    /**
+     * Créer un object qui va permettre de dessiner le block en question
+     * charge les ressources lors de la première instance
+     * @param block 
+     *  le block
+     */
     public BlockRenderer(Block block){
         if(!load){
             try {
@@ -52,6 +58,14 @@ public abstract class BlockRenderer implements Renderable{
         this.objectToRender = block;
     }
     
+    /**
+     * Méthode de rendu
+     * @param gc
+     * @param sbg
+     * @param grphcs
+     *  objet qui va dessiner le block
+     * @throws SlickException 
+     */
     @Override
     public void render(GameContainer gc, StateBasedGame sbg, Graphics grphcs) throws SlickException {
         grphcs.pushTransform();
