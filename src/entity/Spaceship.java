@@ -103,7 +103,7 @@ public class Spaceship implements Updateable{
      *  1 pour avancer , -1 pour reculer
      */
     public void avancer(int direction){
-        if(Math.abs(getCurrent_speed())<max_speed){
+        if(Math.abs(getCurrent_speed())<getMax_speed()){
             if(direction>0)
                 current_speed += acc;
             else if(direction<0)
@@ -225,5 +225,12 @@ public class Spaceship implements Updateable{
      */
     public boolean isDetruit() {
         return detruit;
+    }
+
+    /**
+     * @return the max_speed
+     */
+    public float getMax_speed() {
+        return max_speed;
     }
 }

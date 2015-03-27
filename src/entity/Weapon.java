@@ -69,7 +69,7 @@ public class Weapon extends Block{
         if(source!=null){
             float lCenterX = center[0]-(float)(Math.sin(Math.toRadians(angle))*(-HEIGHT/2));
             float lCenterY = center[1]+(float)(Math.cos(Math.toRadians(angle))*(-HEIGHT/2));
-            Laser l = new Laser(lCenterX,lCenterY,angle-90,source.getCurrent_speed()+6f,source);
+            Laser l = new Laser(lCenterX,lCenterY,angle-90,Math.abs(source.getMax_speed())+6f,source);
             LaserRenderer r = new LaserRenderer(l);
             gc.addNewObject(l, r);
             gc.addCollideListener(l);
