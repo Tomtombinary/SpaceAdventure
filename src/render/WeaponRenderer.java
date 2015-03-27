@@ -29,18 +29,6 @@ public class WeaponRenderer extends BlockRenderer{
 
     public WeaponRenderer(Weapon block) {
         super(block);
+        current = weapon;
     }
-
-    @Override
-    public void render(GameContainer gc, StateBasedGame sbg, Graphics grphcs) throws SlickException {
-        grphcs.pushTransform();
-        grphcs.translate(objectToRender.getCenterX(),objectToRender.getCenterY());
-        grphcs.rotate(0,0,objectToRender.getAngle()+((Weapon)objectToRender).getOrientation());
-        grphcs.drawImage(weapon,
-                objectToRender.getX()-objectToRender.getCenterX(),
-                objectToRender.getY()-objectToRender.getCenterY()
-        );
-        grphcs.popTransform();
-    }
-    
 }

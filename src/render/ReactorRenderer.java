@@ -16,10 +16,6 @@
 package render;
 
 import entity.Reactor;
-import org.newdawn.slick.GameContainer;
-import org.newdawn.slick.Graphics;
-import org.newdawn.slick.SlickException;
-import org.newdawn.slick.state.StateBasedGame;
 
 /**
  *
@@ -29,19 +25,6 @@ public class ReactorRenderer extends BlockRenderer{
 
     public ReactorRenderer(Reactor block) {
         super(block);
+        current = reactor;
     }
-
-    
-    @Override
-    public void render(GameContainer gc, StateBasedGame sbg, Graphics grphcs) throws SlickException {
-        grphcs.pushTransform();
-        grphcs.translate(objectToRender.getCenterX(),objectToRender.getCenterY());
-        grphcs.rotate(0,0,objectToRender.getAngle());
-        grphcs.drawImage(reactor,
-                objectToRender.getX()-objectToRender.getCenterX(),
-                objectToRender.getY()-objectToRender.getCenterY()
-        );
-        grphcs.popTransform();
-    }
-    
 }

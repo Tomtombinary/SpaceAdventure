@@ -16,8 +16,11 @@
 package render;
 
 import entity.*;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.state.StateBasedGame;
 
 /**
  *
@@ -31,10 +34,13 @@ public abstract class BlockRenderer implements Renderable{
     protected static Image weapon;
     
     protected Block objectToRender;
+    protected Image current;
     
+    @Override
     public Object getObjectToRender(){
         return objectToRender;
     }
+    
     public BlockRenderer(Block block){
         if(!load){
             try {
@@ -44,6 +50,18 @@ public abstract class BlockRenderer implements Renderable{
             }
         }
         this.objectToRender = block;
+    }
+    
+    @Override
+    public void render(GameContainer gc, StateBasedGame sbg, Graphics grphcs) throws SlickException {
+        grphcs.pushTransform();
+        grphcs.translate(objectToRender.getCenterX(),objectToRender.getCenterY());
+        grphcs.rotate(0,0,objectToRender.getAngle());
+        grphcs.drawImage(current,
+                objectToRender.getX()-objectToRender.getCenterX(),
+                objectToRender.getY()-objectToRender.getCenterY()
+        );
+        grphcs.popTransform();
     }
     
     private static final void loadRessources() throws SlickException{
