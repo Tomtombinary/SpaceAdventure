@@ -25,6 +25,7 @@ import java.util.Set;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Point;
+import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.openal.Audio;
 import org.newdawn.slick.openal.AudioLoader;
@@ -35,7 +36,7 @@ import org.newdawn.slick.util.ResourceLoader;
  *
  * @author thomas
  */
-public class Spaceship implements Updateable{
+public class Spaceship extends Rectangle implements Updateable{
     
     private static Audio laserEffect;
     
@@ -46,7 +47,6 @@ public class Spaceship implements Updateable{
     private float max_speed;
     
     private float angle;
-    private float centerX,centerY;
     private Vector2f vitesse;
     private Map<Point,Block> blocks = new HashMap();
     
@@ -58,6 +58,7 @@ public class Spaceship implements Updateable{
      *  centre en Y
      */
     public Spaceship(float center_x,float center_y){
+        super(0,0,0,0);
         if(laserEffect == null){
             try {
                 laserEffect = AudioLoader.getAudio("WAV",ResourceLoader.getResourceAsStream("res/laser.wav"));
@@ -66,8 +67,8 @@ public class Spaceship implements Updateable{
             }
         }
         this.vitesse = new Vector2f(0,0);
-        this.centerX = center_x;
-        this.centerY = center_y;
+        this.center[0] = center_x;
+        this.center[1] = center_y;
         this.deceleration = 0.99f;
         this.current_speed = 0;
         this.acc = 0;
@@ -129,6 +130,17 @@ public class Spaceship implements Updateable{
         return angle;
     }
 
+    @Override
+    public void setCenterX(float centerx){
+        super.setCenterX(centerx);
+        this.x = centerx-width/2;
+    }
+    
+    @Override
+    public void setCenterY(float centery){
+        super.setCenterY(centery);
+        this.y = centery-height/2;
+    }
     /**
      * @param angle the angle to set
      */
@@ -145,20 +157,6 @@ public class Spaceship implements Updateable{
      */
     public Map<Point,Block> getBlocks() {
         return blocks;
-    }
-
-    /**
-     * @return the center_x
-     */
-    public float getCenterX() {
-        return centerX;
-    }
-
-    /**
-     * @return the center_y
-     */
-    public float getCenterY() {
-        return centerY;
     }
 
     /**
@@ -192,8 +190,8 @@ public class Spaceship implements Updateable{
                 Block b = (Block)blocks.get(p);
                 b.setSource(null);
                 b.setDeplacement(new Vector2f(
-                        vitesse.x+(float)((b.getCenterX()-this.centerX+1)*(Math.random()*0.10f)),
-                        vitesse.y+(float)((b.getCenterY()-this.centerY+1)*(Math.random()*0.10f))
+                        vitesse.x+(float)((b.getCenterX()-this.getCenterX()+1)*(Math.random()*0.10f)),
+                        vitesse.y+(float)((b.getCenterY()-this.getCenterY()+1)*(Math.random()*0.10f))
                 ));
                 b.setAngleSpeed((float)(Math.random()*5));
                 gc.addNewObject(b, null);
@@ -207,8 +205,8 @@ public class Spaceship implements Updateable{
             current_speed*=deceleration;
             vitesse.x = (float)Math.cos(Math.toRadians(angle-90))*getCurrent_speed();
             vitesse.y = (float)Math.sin(Math.toRadians(angle-90))*getCurrent_speed();
-            this.centerX += vitesse.getX();
-            this.centerY += vitesse.getY();
+            this.setCenterX(this.getCenterX()+vitesse.getX());
+            this.setCenterY(this.getCenterY()+vitesse.getY());
             updateBlocks();
         }
     }
