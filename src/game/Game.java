@@ -136,6 +136,10 @@ public class Game extends BasicGameState{
         player.addBlock(new Weapon(),-1,1);
         player.addBlock(new Weapon(),-1,-1);
         player.addBlock(new Armor(),1,0);
+        player.addBlock(new Armor(),2,1);
+        player.addBlock(new Armor(),2,2);
+        player.addBlock(new Armor(),2,3);
+        player.addBlock(new Armor(),2,4);
         player.addBlock(new Reactor(1f,10f),2,0);
         player.addBlock(new Armor(),1,-1);
         player.addBlock(new Armor(),1,1);
@@ -163,6 +167,7 @@ public class Game extends BasicGameState{
         objectsToRender.add(new SpaceshipRenderer(player));
         objectsToUpdate.add(new Player(player));
         objectsToUpdate.add(player);
+        collideListeners.add(player);
     }
 
     @Override

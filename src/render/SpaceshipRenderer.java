@@ -25,9 +25,11 @@ import java.util.Iterator;
 import java.util.Set;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Point;
 import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.geom.Rectangle;
 
 /**
  *
@@ -65,5 +67,10 @@ public class SpaceshipRenderer implements Renderable{
     public void render(GameContainer gc, StateBasedGame sbg, Graphics grphcs) throws SlickException {
         for(BlockRenderer block : blockRenderer)
             block.render(gc, sbg, grphcs);
+        grphcs.setColor(Color.red);
+        grphcs.pushTransform();
+        grphcs.rotate(vaisseau.getCenterX(),vaisseau.getCenterY(),vaisseau.getAngle());
+        grphcs.drawRect(vaisseau.getX(), vaisseau.getY(), vaisseau.getWidth(), vaisseau.getHeight());
+        grphcs.popTransform();
     }
 }

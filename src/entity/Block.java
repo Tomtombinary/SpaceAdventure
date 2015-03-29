@@ -23,13 +23,14 @@ import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Transform;
 import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.state.StateBasedGame;
+import game.Game;
 
 
 /**
  *
  * @author thomas
  */
-public abstract class Block extends Rectangle implements Updateable{
+public abstract class Block extends Rectangle implements Updateable, CollideListener{
     
     
     public static final int WIDTH=32,HEIGHT=32;
@@ -143,5 +144,9 @@ public abstract class Block extends Rectangle implements Updateable{
      */
     public void setAngleSpeed(float angleSpeed) {
         this.angleSpeed = angleSpeed;
+    }
+    
+    public void Collide(Game gc, CollideListener c) {
+        
     }
 }

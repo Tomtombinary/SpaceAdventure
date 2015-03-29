@@ -22,6 +22,7 @@ import org.newdawn.slick.Image;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.SpriteSheet;
 import org.newdawn.slick.state.StateBasedGame;
+import org.newdawn.slick.Color;
 
 /**
  *
@@ -77,7 +78,10 @@ public class MeteoriteRenderer implements Renderable{
                 objectToRender.getX()-objectToRender.getCenterX(),
                 objectToRender.getY()-objectToRender.getCenterY()
         );
+        grphcs.setColor(Color.red);
+        grphcs.drawRect(objectToRender.getX()-objectToRender.getCenterX(), objectToRender.getY()-objectToRender.getCenterY(), objectToRender.getWidth(), objectToRender.getHeight());
         grphcs.popTransform();
+        
     }
     
 }

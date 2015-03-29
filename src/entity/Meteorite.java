@@ -211,8 +211,7 @@ public class Meteorite extends Rectangle implements Updateable, CollideListener,
                 if (this.pv <= 0) {
                     this.detruire(gc);
                 }
-
-            }
+        }
         }
     }
 

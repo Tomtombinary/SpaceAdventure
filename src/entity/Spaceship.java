@@ -31,12 +31,15 @@ import org.newdawn.slick.openal.Audio;
 import org.newdawn.slick.openal.AudioLoader;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.util.ResourceLoader;
+import java.lang.Math;
+import org.newdawn.slick.geom.Shape;
+import org.newdawn.slick.geom.Transform;
 
 /**
  *
  * @author thomas
  */
-public class Spaceship extends Rectangle implements Updateable{
+public class Spaceship extends Rectangle implements Updateable, CollideListener{
     
     private static Audio laserEffect;
     
@@ -49,6 +52,27 @@ public class Spaceship extends Rectangle implements Updateable{
     private float angle;
     private Vector2f vitesse;
     private Map<Point,Block> blocks = new HashMap();
+    
+    private int infHMax=0;
+    private int supHMax=0;
+    private int infWMax=0;
+    private int supWMax=0;
+    
+    public int getInfHMax(){
+        return this.infHMax;
+    }
+    
+    public int getSupHMax(){
+        return this.supHMax;
+    }
+    
+    public int getInfWMax(){
+        return this.infWMax;
+    }
+    
+    public int getSupWMax(){
+        return this.supWMax;
+    }
     
     /**
      * Créer un vaisseau avec pour centre centre_x,centre_y
@@ -91,6 +115,32 @@ public class Spaceship extends Rectangle implements Updateable{
         b.setCenterX(getCenterX()+colonne*Block.WIDTH);
         b.setCenterY(getCenterY()+ligne*Block.HEIGHT);
         b.setSource(this);
+        if (colonne<infWMax || colonne>supWMax){
+            if (colonne<infWMax){
+                infWMax=colonne;
+                width+=Block.WIDTH;
+            }
+            if (colonne>supWMax){
+                supWMax=colonne;
+                width+=Block.WIDTH;
+            }
+        }
+        if (ligne<infHMax || ligne>supHMax){
+            if (ligne<infHMax){
+                infHMax=ligne;
+                height+=Block.HEIGHT;
+            }
+            if (ligne>supHMax){
+                supHMax=ligne;
+                height+=Block.HEIGHT;
+            }
+        }
+        if (width==0 && height==0){
+            width+=Block.WIDTH;
+            height=Block.HEIGHT;
+        }
+        this.setCenterX(this.getCenterX()+vitesse.getX());
+        this.setCenterY(this.getCenterY()+vitesse.getY());
         blocks.put(new Point(colonne,ligne), b);
         if(b instanceof Reactor){
             acc+=((Reactor)b).getAcc();
@@ -133,14 +183,15 @@ public class Spaceship extends Rectangle implements Updateable{
     @Override
     public void setCenterX(float centerx){
         super.setCenterX(centerx);
-        this.x = centerx-width/2;
+        this.x= centerx-(float)((Math.abs((double)infWMax)/(Math.abs(infWMax)+Math.abs(supWMax)+1))+(double)1/(2*(Math.abs(infWMax)+Math.abs(supWMax)+1)))*width;
     }
     
     @Override
     public void setCenterY(float centery){
         super.setCenterY(centery);
-        this.y = centery-height/2;
+        this.y=centery-(float)((Math.abs((double)infHMax)/(Math.abs(infHMax)+Math.abs(supHMax)+1))+(double)1/(2*(Math.abs(infHMax)+Math.abs(supHMax)+1)))*height;
     }
+    
     /**
      * @param angle the angle to set
      */
@@ -230,5 +281,26 @@ public class Spaceship extends Rectangle implements Updateable{
      */
     public float getMax_speed() {
         return max_speed;
+    }
+    
+    @Override
+    public boolean intersects(Shape shape) {
+        Rectangle R=new Rectangle(this.getX(), this.getY(), this.getWidth(), this.getHeight());
+        Shape rotateR = R.transform(Transform.createRotateTransform((float) Math.toRadians(angle), this.getCenterX(), this.getCenterY()));
+        return rotateR.intersects(shape);
+    }
+    
+    @Override
+    public void Collide(Game gc,CollideListener c){
+        Map map =this.blocks;
+        Set cles = map.keySet();
+        Iterator it = cles.iterator();
+        while (it.hasNext()){
+            Object cle = it.next();
+            Object valeur = map.get(cle);
+            if(((Block)valeur).intersects((Shape)c)){
+                this.avancer(-1);
+            }
+        }
     }
 }
