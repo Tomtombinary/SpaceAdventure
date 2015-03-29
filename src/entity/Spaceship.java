@@ -31,7 +31,6 @@ import org.newdawn.slick.openal.Audio;
 import org.newdawn.slick.openal.AudioLoader;
 import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.util.ResourceLoader;
-import java.lang.Math;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Transform;
 
@@ -285,19 +284,18 @@ public class Spaceship extends Rectangle implements Updateable, CollideListener{
     
     @Override
     public boolean intersects(Shape shape) {
-        Rectangle R=new Rectangle(this.getX(), this.getY(), this.getWidth(), this.getHeight());
-        Shape rotateR = R.transform(Transform.createRotateTransform((float) Math.toRadians(angle), this.getCenterX(), this.getCenterY()));
+        Rectangle hitBox = new Rectangle(this.getX(),this.getY(),this.getWidth(),this.getHeight());
+        Shape rotateR = hitBox.transform(Transform.createRotateTransform((float) Math.toRadians(angle), this.getCenterX(), this.getCenterY()));
         return rotateR.intersects(shape);
     }
     
     @Override
     public void Collide(Game gc,CollideListener c){
-        Map map =this.blocks;
-        Set cles = map.keySet();
+        Set cles = blocks.keySet();
         Iterator it = cles.iterator();
         while (it.hasNext()){
-            Object cle = it.next();
-            Object valeur = map.get(cle);
+            Point cle = (Point)it.next();
+            Object valeur = blocks.get(cle);
             if(((Block)valeur).intersects((Shape)c)){
                 this.avancer(-1);
             }
