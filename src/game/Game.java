@@ -114,6 +114,9 @@ public class Game extends BasicGameState{
             objectsToRender.remove(r);
         for(CollideListener l : supCollideListener)
             collideListeners.remove(l);
+        objectsSupToUpdate.clear();
+        objectsSupToRender.clear();
+        supCollideListener.clear();
     }
     
     private void addWaitedObjects(){
@@ -143,7 +146,9 @@ public class Game extends BasicGameState{
         player.addBlock(new Reactor(1f,10f),2,0);
         player.addBlock(new Armor(),1,-1);
         player.addBlock(new Armor(),1,1);
-        
+        player.initSpaceship();
+        player.setCenterX(Window.WIDTH/2);
+        player.setCenterY(Window.HEIGHT/2);
         for(int i=0;i<100;i++){
             objectsToRender.add(new EtoileRenderer(
                     (float)Math.random()*Window.WIDTH*4-Window.WIDTH*2,

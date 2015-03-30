@@ -41,13 +41,13 @@ import org.newdawn.slick.geom.Transform;
 public class Spaceship extends Rectangle implements Updateable, CollideListener{
     
     private static Audio laserEffect;
-    
     private boolean detruit;
     private float deceleration;
     private float acc;
     private float current_speed;
     private float max_speed;
     
+    private float [] centreConstruction = new float[2];
     private float angle;
     private Vector2f vitesse;
     private Map<Point,Block> blocks = new HashMap();
@@ -74,7 +74,7 @@ public class Spaceship extends Rectangle implements Updateable, CollideListener{
     }
     
     /**
-     * Créer un vaisseau avec pour centre centre_x,centre_y
+     * Créer un vaisseau avec pour centre TEMPORAIRE centre_x,centre_y
      * @param center_x
      *  centre en X
      * @param center_y 
@@ -90,8 +90,8 @@ public class Spaceship extends Rectangle implements Updateable, CollideListener{
             }
         }
         this.vitesse = new Vector2f(0,0);
-        this.center[0] = center_x;
-        this.center[1] = center_y;
+        this.centreConstruction[0] = center_x;
+        this.centreConstruction[1] = center_y;
         this.deceleration = 0.99f;
         this.current_speed = 0;
         this.acc = 0;
@@ -111,8 +111,8 @@ public class Spaceship extends Rectangle implements Updateable, CollideListener{
      *  colonne par rapport au centre du vaisseau
      */
     public void addBlock(Block b,int ligne,int colonne){
-        b.setCenterX(getCenterX()+colonne*Block.WIDTH);
-        b.setCenterY(getCenterY()+ligne*Block.HEIGHT);
+        b.setCenterX(centreConstruction[0]+colonne*Block.WIDTH);
+        b.setCenterY(centreConstruction[1]+ligne*Block.HEIGHT);
         b.setSource(this);
         if (colonne<infWMax || colonne>supWMax){
             if (colonne<infWMax){
@@ -138,15 +138,30 @@ public class Spaceship extends Rectangle implements Updateable, CollideListener{
             width+=Block.WIDTH;
             height=Block.HEIGHT;
         }
-        this.setCenterX(this.getCenterX()+vitesse.getX());
-        this.setCenterY(this.getCenterY()+vitesse.getY());
-        blocks.put(new Point(colonne,ligne), b);
+        this.x= centreConstruction[0]-(float)((Math.abs((double)infWMax)/(Math.abs(infWMax)+Math.abs(supWMax)+1))+(double)1/(2*(Math.abs(infWMax)+Math.abs(supWMax)+1)))*width;
+        this.y= centreConstruction[1]-(float)((Math.abs((double)infHMax)/(Math.abs(infHMax)+Math.abs(supHMax)+1))+(double)1/(2*(Math.abs(infHMax)+Math.abs(supHMax)+1)))*height;
+        blocks.put(new Point(colonne*Block.WIDTH,ligne*Block.HEIGHT), b);
         if(b instanceof Reactor){
             acc+=((Reactor)b).getAcc();
             max_speed+=((Reactor)b).getMax_speed();
         }
     }
     
+    /**
+     * Calcul le nouveau centre du vaisseau
+     */
+    public void initSpaceship(){
+        center[0] = x+width/2;
+        center[1] = y+height/2;
+        float diffx = centreConstruction[0]-center[0];
+        float diffy = centreConstruction[1]-center[1];
+        Set keys = blocks.keySet();
+        Iterator it = keys.iterator();
+        while(it.hasNext()){
+            Point key = (Point)it.next();
+            key.setLocation(key.getX()+diffx,key.getY()+diffy);  
+        }
+    }
     /**
      * Avance/Recule le vaisseau dans la direction définie par l'angle , et a la vitesse definie par les reacteurs
      * @param direction 
@@ -168,8 +183,8 @@ public class Spaceship extends Rectangle implements Updateable, CollideListener{
             Point p = (Point)it.next();
             Block b = (Block)blocks.get(p);
             b.setAngle(angle);
-            b.setCenterX((float)(getCenterX()+Math.cos(Math.toRadians(angle))*(p.getX()*Block.WIDTH)-Math.sin(Math.toRadians(angle))*(p.getY()*Block.HEIGHT)));
-            b.setCenterY((float)(getCenterY()+Math.sin(Math.toRadians(angle))*(p.getX()*Block.WIDTH)+Math.cos(Math.toRadians(angle))*(p.getY()*Block.HEIGHT)));
+            b.setCenterX((float)(getCenterX()+Math.cos(Math.toRadians(angle))*(p.getX())-Math.sin(Math.toRadians(angle))*(p.getY())));
+            b.setCenterY((float)(getCenterY()+Math.sin(Math.toRadians(angle))*(p.getX())+Math.cos(Math.toRadians(angle))*(p.getY())));
         }
     }
     /**
@@ -182,13 +197,13 @@ public class Spaceship extends Rectangle implements Updateable, CollideListener{
     @Override
     public void setCenterX(float centerx){
         super.setCenterX(centerx);
-        this.x= centerx-(float)((Math.abs((double)infWMax)/(Math.abs(infWMax)+Math.abs(supWMax)+1))+(double)1/(2*(Math.abs(infWMax)+Math.abs(supWMax)+1)))*width;
+        this.x = centerx-width/2;
     }
     
     @Override
     public void setCenterY(float centery){
         super.setCenterY(centery);
-        this.y=centery-(float)((Math.abs((double)infHMax)/(Math.abs(infHMax)+Math.abs(supHMax)+1))+(double)1/(2*(Math.abs(infHMax)+Math.abs(supHMax)+1)))*height;
+        this.y = centery-height/2;
     }
     
     /**
@@ -284,8 +299,7 @@ public class Spaceship extends Rectangle implements Updateable, CollideListener{
     
     @Override
     public boolean intersects(Shape shape) {
-        Rectangle hitBox = new Rectangle(this.getX(),this.getY(),this.getWidth(),this.getHeight());
-        Shape rotateR = hitBox.transform(Transform.createRotateTransform((float) Math.toRadians(angle), this.getCenterX(), this.getCenterY()));
+        Shape rotateR = this.transform(Transform.createRotateTransform((float) Math.toRadians(angle), this.getCenterX(), this.getCenterY()));
         return rotateR.intersects(shape);
     }
     

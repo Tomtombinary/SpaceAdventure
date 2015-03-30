@@ -38,6 +38,7 @@ public class Engine extends StateBasedGame {
                     Window.HEIGHT,
                     Window.fullscreen
             );
+            appgc.setTargetFrameRate(60);
             appgc.start();
         }catch (SlickException ex){
             Logger.getLogger(Engine.class.getName()).log(Level.SEVERE, null, ex);
