@@ -18,6 +18,7 @@ package entity;
 import controller.Updateable;
 import game.Game;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -40,6 +41,7 @@ import org.newdawn.slick.geom.Transform;
  */
 public class Spaceship extends Rectangle implements Updateable, CollideListener{
     
+    private final ArrayList<Point> blockToRemove = new ArrayList();
     private static Audio laserEffect;
     private boolean detruit;
     private float deceleration;
@@ -309,11 +311,21 @@ public class Spaceship extends Rectangle implements Updateable, CollideListener{
         Iterator it = cles.iterator();
         while (it.hasNext()){
             Point cle = (Point)it.next();
-            Object valeur = blocks.get(cle);
-            if(((Block)valeur).intersects((Shape)c)){
-                this.avancer(-1);
+            Block block = (Block)blocks.get(cle);
+            if(block.intersects((Shape)c)){
+                block.setAngleSpeed((float)(Math.random()*5));
+                block.setDeplacement(new Vector2f(
+                       (float)(Math.random()*10-5),
+                       (float)(Math.random()*10-5)
+                ));
+                block.setSource(null);
+                gc.addNewObject(block, null);
+                blockToRemove.add(cle);
             }
         }
+        for(Point key : blockToRemove)
+            blocks.remove(key);
+        blockToRemove.clear();
     }
     
     @Override

@@ -187,9 +187,6 @@ public class Meteorite extends Rectangle implements Updateable, CollideListener,
     @Override
     public boolean intersects(Shape shape) {
         Shape rotateBlock = this.transform(Transform.createRotateTransform((float) Math.toRadians(angle), this.getCenterX(), this.getCenterY()));
-        if(shape instanceof Spaceship){
-            System.out.println(rotateBlock.intersects(shape));
-        }
         return rotateBlock.intersects(shape);
     }
 

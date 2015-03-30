@@ -30,7 +30,7 @@ import game.Game;
  *
  * @author thomas
  */
-public abstract class Block extends Rectangle implements Updateable, CollideListener{
+public abstract class Block extends Rectangle implements Updateable, CollideListener,Destroyable{
     
     
     public static final int WIDTH=32,HEIGHT=32;
@@ -144,6 +144,16 @@ public abstract class Block extends Rectangle implements Updateable, CollideList
      */
     public void setAngleSpeed(float angleSpeed) {
         this.angleSpeed = angleSpeed;
+    }
+    
+    @Override
+    public boolean isDetruit(){
+        return false;
+    }
+    
+    @Override
+    public void detruire(Game gc){
+        //TODO
     }
     
     public void Collide(Game gc, CollideListener c) {
