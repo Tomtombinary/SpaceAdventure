@@ -307,25 +307,27 @@ public class Spaceship extends Rectangle implements Updateable, CollideListener{
     
     @Override
     public void Collide(Game gc,CollideListener c){
-        Set cles = blocks.keySet();
-        Iterator it = cles.iterator();
-        while (it.hasNext()){
-            Point cle = (Point)it.next();
-            Block block = (Block)blocks.get(cle);
-            if(block.intersects((Shape)c)){
-                block.setAngleSpeed((float)(Math.random()*5));
-                block.setDeplacement(new Vector2f(
-                       (float)(Math.random()*10-5),
-                       (float)(Math.random()*10-5)
-                ));
-                block.setSource(null);
-                gc.addNewObject(block, null);
-                blockToRemove.add(cle);
+        if(c instanceof Meteorite){
+            Set cles = blocks.keySet();
+            Iterator it = cles.iterator();
+            while (it.hasNext()){
+                Point cle = (Point)it.next();
+                Block block = (Block)blocks.get(cle);
+                if(block.intersects((Shape)c)){
+                    block.setAngleSpeed((float)(Math.random()*5));
+                    block.setDeplacement(new Vector2f(
+                           (float)(Math.random()*10-5),
+                           (float)(Math.random()*10-5)
+                    ));
+                    block.setSource(null);
+                    gc.addNewObject(block, null);
+                    blockToRemove.add(cle);
+                }
             }
+            for(Point key : blockToRemove)
+                blocks.remove(key);
+            blockToRemove.clear();
         }
-        for(Point key : blockToRemove)
-            blocks.remove(key);
-        blockToRemove.clear();
     }
     
     @Override

@@ -157,13 +157,21 @@ public class Game extends BasicGameState{
             );
         }
         
-        for(int i=0;i<10;i++){
+        for(int i=0;i<5;i++){
             Meteorite meteor = new Meteorite(
                     (float)(Math.random())*Window.WIDTH,
                     (float)(Math.random())*Window.HEIGHT,
                     Meteorite.BIG
-            );
+                );
             MeteoriteRenderer meteorRender = new MeteoriteRenderer(meteor);
+            while(meteor.intersects(player)){
+                meteor = new Meteorite(
+                    (float)(Math.random())*Window.WIDTH,
+                    (float)(Math.random())*Window.HEIGHT,
+                    Meteorite.BIG
+                );
+                meteorRender = new MeteoriteRenderer(meteor);
+            }
             objectsToUpdate.add(meteor);
             objectsToRender.add(meteorRender);
             collideListeners.add(meteor);
