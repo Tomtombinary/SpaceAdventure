@@ -149,6 +149,7 @@ public class Game extends BasicGameState{
         player.initSpaceship();
         player.setCenterX(Window.WIDTH/2);
         player.setCenterY(Window.HEIGHT/2);
+        System.out.println(player);
         for(int i=0;i<100;i++){
             objectsToRender.add(new EtoileRenderer(
                     (float)Math.random()*Window.WIDTH*4-Window.WIDTH*2,

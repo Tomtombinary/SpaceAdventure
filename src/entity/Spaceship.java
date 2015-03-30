@@ -117,29 +117,29 @@ public class Spaceship extends Rectangle implements Updateable, CollideListener{
         if (colonne<infWMax || colonne>supWMax){
             if (colonne<infWMax){
                 infWMax=colonne;
-                width+=Block.WIDTH;
+                setWidth(getWidth()+Block.WIDTH);
             }
             if (colonne>supWMax){
                 supWMax=colonne;
-                width+=Block.WIDTH;
+                setWidth(getWidth()+Block.WIDTH);
             }
         }
         if (ligne<infHMax || ligne>supHMax){
             if (ligne<infHMax){
                 infHMax=ligne;
-                height+=Block.HEIGHT;
+                setHeight(getHeight()+Block.HEIGHT);
             }
             if (ligne>supHMax){
                 supHMax=ligne;
-                height+=Block.HEIGHT;
+                setHeight(getHeight()+Block.HEIGHT);
             }
         }
         if (width==0 && height==0){
-            width+=Block.WIDTH;
-            height=Block.HEIGHT;
+            setWidth(getWidth()+Block.WIDTH);
+            setHeight(Block.HEIGHT);
         }
-        this.x= centreConstruction[0]-(float)((Math.abs((double)infWMax)/(Math.abs(infWMax)+Math.abs(supWMax)+1))+(double)1/(2*(Math.abs(infWMax)+Math.abs(supWMax)+1)))*width;
-        this.y= centreConstruction[1]-(float)((Math.abs((double)infHMax)/(Math.abs(infHMax)+Math.abs(supHMax)+1))+(double)1/(2*(Math.abs(infHMax)+Math.abs(supHMax)+1)))*height;
+        this.setX(centreConstruction[0]-(float)((Math.abs((double)infWMax)/(Math.abs(infWMax)+Math.abs(supWMax)+1))+(double)1/(2*(Math.abs(infWMax)+Math.abs(supWMax)+1)))*width);
+        this.setY(centreConstruction[1]-(float)((Math.abs((double)infHMax)/(Math.abs(infHMax)+Math.abs(supHMax)+1))+(double)1/(2*(Math.abs(infHMax)+Math.abs(supHMax)+1)))*height);
         blocks.put(new Point(colonne*Block.WIDTH,ligne*Block.HEIGHT), b);
         if(b instanceof Reactor){
             acc+=((Reactor)b).getAcc();
@@ -197,13 +197,13 @@ public class Spaceship extends Rectangle implements Updateable, CollideListener{
     @Override
     public void setCenterX(float centerx){
         super.setCenterX(centerx);
-        this.x = centerx-width/2;
+        this.x = this.getCenterX()-width/2;
     }
     
     @Override
     public void setCenterY(float centery){
         super.setCenterY(centery);
-        this.y = centery-height/2;
+        this.y = this.getCenterY()-height/2;
     }
     
     /**
@@ -314,5 +314,10 @@ public class Spaceship extends Rectangle implements Updateable, CollideListener{
                 this.avancer(-1);
             }
         }
+    }
+    
+    @Override
+    public String toString(){
+        return "Rectangle : width : "+this.width+" height : "+height+" ("+center[0]+","+center[1]+")"+"("+x+","+y+")";
     }
 }
