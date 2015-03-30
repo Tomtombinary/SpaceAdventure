@@ -316,8 +316,8 @@ public class Spaceship extends Rectangle implements Updateable, CollideListener{
                 if(block.intersects((Shape)c)){
                     block.setAngleSpeed((float)(Math.random()*5));
                     block.setDeplacement(new Vector2f(
-                           (float)(Math.random()*10-5),
-                           (float)(Math.random()*10-5)
+                           (float)(getCenterX()-((Shape)c).getCenterX())*0.01f,
+                           (float)(getCenterY()-((Shape)c).getCenterY())*0.01f
                     ));
                     block.setSource(null);
                     gc.addNewObject(block, null);
