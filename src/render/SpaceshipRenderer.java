@@ -29,7 +29,6 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.geom.Point;
 import org.newdawn.slick.state.StateBasedGame;
-import org.newdawn.slick.geom.Rectangle;
 
 /**
  *

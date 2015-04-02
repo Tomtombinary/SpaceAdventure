@@ -64,13 +64,13 @@ public abstract class Block extends Rectangle implements Updateable, CollideList
     @Override
     public void setCenterX(float centerX){
         super.setCenterX(centerX);
-        this.x = centerX-WIDTH/2;
+        this.setX(centerX-WIDTH/2);
     }
     
     @Override
     public void setCenterY(float centerY){
         super.setCenterY(centerY);
-        this.y = centerY-HEIGHT/2;
+        this.setY(centerY-HEIGHT/2);
     }
     
     /**

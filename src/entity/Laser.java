@@ -87,13 +87,13 @@ public class Laser extends Rectangle implements Updateable,CollideListener,Destr
     @Override
     public void setCenterX(float centerX){
         super.setCenterX(centerX);
-        this.x = centerX-WIDTH/2;
+        this.setX(getCenterX()-WIDTH/2);
     }
     
     @Override
     public void setCenterY(float centerY){
         super.setCenterY(centerY);
-        this.y = centerY-HEIGHT/2;
+        this.setY(getCenterY()-HEIGHT/2);
     }
     
     @Override
@@ -143,6 +143,7 @@ public class Laser extends Rectangle implements Updateable,CollideListener,Destr
 
     @Override
     public void detruire(Game gc) {
+        this.detruit = true;
         gc.removeCollideListener(this);
         gc.removeObject((Laser) this);
     }

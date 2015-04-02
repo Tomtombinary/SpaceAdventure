@@ -157,11 +157,13 @@ public class Spaceship extends Rectangle implements Updateable, CollideListener{
         center[1] = y+height/2;
         float diffx = centreConstruction[0]-center[0];
         float diffy = centreConstruction[1]-center[1];
+        System.out.println("Init spaceship");
         Set keys = blocks.keySet();
         Iterator it = keys.iterator();
         while(it.hasNext()){
             Point key = (Point)it.next();
-            key.setLocation(key.getX()+diffx,key.getY()+diffy);  
+            key.setLocation(key.getX()+diffx,key.getY()+diffy);
+            System.out.println("key : "+key.getX()+","+key.getY());
         }
     }
     /**
@@ -310,18 +312,19 @@ public class Spaceship extends Rectangle implements Updateable, CollideListener{
         boolean detruitBlock = false;
         if(c instanceof Meteorite)detruitBlock = true;
         else if(c instanceof Laser){
-            if(((Laser)c).getSource()!=this)
+            if(((Laser)c).getSource()!=this && !((Laser)c).isDetruit())
                 detruitBlock=true;
         }
         if(detruitBlock){
             Set cles = blocks.keySet();
             Iterator it = cles.iterator();
+            System.out.println("Collision block restant : "+blocks.size());
             while (it.hasNext()){
                 Point cle = (Point)it.next();
                 Block block = (Block)blocks.get(cle);
-                System.out.println(block+" -> "+cle.getX()+":"+cle.getY());
+                System.out.println(cle.getX()+" : "+cle.getY()+" -> "+block);
                 if(block.intersects((Shape)c)){
-                    System.out.println(block);
+                    System.out.println("intersects");
                     block.setAngleSpeed((float)(Math.random()*5));
                     block.setDeplacement(new Vector2f(
                            (float)(getCenterX()-((Shape)c).getCenterX())*0.05f,
@@ -330,13 +333,16 @@ public class Spaceship extends Rectangle implements Updateable, CollideListener{
                     block.setSource(null);
                     gc.addNewObject(block, null);
                     gc.addCollideListener(block);
+                    
                     if(block instanceof Reactor){
                         this.acc-=((Reactor)block).getAcc();
                         this.max_speed-=((Reactor)block).getMax_speed();
                     }
-                    if(c instanceof Laser)
-                        ((Destroyable)c).detruire(gc);
                     blockToRemove.add(cle);
+                       if(c instanceof Laser){
+                        ((Destroyable)c).detruire(gc);
+                        break;
+                    }
                 }
             }
             for(Point key : blockToRemove)

@@ -139,21 +139,14 @@ public class Game extends BasicGameState{
     
     @Override
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-        player.addBlock(new Armor(),0,0);
-        player.addBlock(new Armor(),0,-1);
-        player.addBlock(new Armor(),0,1);
-        player.addBlock(new Weapon(),-1,1);
-        player.addBlock(new Weapon(),-1,-1);
-        player.addBlock(new Armor(),1,0);
-        player.addBlock(new Reactor(1f,10f),2,0);
-        player.addBlock(new Armor(),1,-1);
-        player.addBlock(new Armor(),1,1);
+        player.addBlock(new Weapon(),0,0);
+        player.addBlock(new Reactor(1f,10f),1,0);
         player.initSpaceship();
         player.setCenterX(Window.WIDTH/2);
         player.setCenterY(Window.HEIGHT/2);
         
-        for(int i=-1;i<2;i++){
-            for(int j=-1;j<2;j++){
+        for(int i=-2;i<2;i++){
+            for(int j=-2;j<2;j++){
                 test.addBlock(new Armor(), i, j);
             }
         }
