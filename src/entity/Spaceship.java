@@ -307,24 +307,35 @@ public class Spaceship extends Rectangle implements Updateable, CollideListener{
     
     @Override
     public void Collide(Game gc,CollideListener c){
-        if(c instanceof Meteorite){
+        boolean detruitBlock = false;
+        if(c instanceof Meteorite)detruitBlock = true;
+        else if(c instanceof Laser){
+            if(((Laser)c).getSource()!=this)
+                detruitBlock=true;
+        }
+        if(detruitBlock){
             Set cles = blocks.keySet();
             Iterator it = cles.iterator();
             while (it.hasNext()){
                 Point cle = (Point)it.next();
                 Block block = (Block)blocks.get(cle);
+                System.out.println(block+" -> "+cle.getX()+":"+cle.getY());
                 if(block.intersects((Shape)c)){
+                    System.out.println(block);
                     block.setAngleSpeed((float)(Math.random()*5));
                     block.setDeplacement(new Vector2f(
-                           (float)(getCenterX()-((Shape)c).getCenterX())*0.01f,
-                           (float)(getCenterY()-((Shape)c).getCenterY())*0.01f
+                           (float)(getCenterX()-((Shape)c).getCenterX())*0.05f,
+                           (float)(getCenterY()-((Shape)c).getCenterY())*0.05f
                     ));
                     block.setSource(null);
                     gc.addNewObject(block, null);
+                    gc.addCollideListener(block);
                     if(block instanceof Reactor){
                         this.acc-=((Reactor)block).getAcc();
                         this.max_speed-=((Reactor)block).getMax_speed();
                     }
+                    if(c instanceof Laser)
+                        ((Destroyable)c).detruire(gc);
                     blockToRemove.add(cle);
                 }
             }

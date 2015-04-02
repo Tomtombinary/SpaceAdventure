@@ -146,4 +146,12 @@ public class Laser extends Rectangle implements Updateable,CollideListener,Destr
         gc.removeCollideListener(this);
         gc.removeObject((Laser) this);
     }
+    
+    /**
+     * Retourne le vaisseau tireur
+     * @return 
+     */
+    public Spaceship getSource(){
+        return this.source;
+    }
 }

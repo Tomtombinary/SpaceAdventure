@@ -45,6 +45,15 @@ public class SpaceshipRenderer implements Renderable{
         return vaisseau;
     }
     
+    public void removeBlock(Block b){
+        for(int i=0;i<blockRenderer.size();i++){
+            if(blockRenderer.get(i).objectToRender==b){
+                blockRenderer.remove(i);
+                break;
+            }
+        }
+    }
+    
     public SpaceshipRenderer(Spaceship vaisseau){
         this.vaisseau = vaisseau;
         Set keys = vaisseau.getBlocks().keySet();
@@ -70,7 +79,7 @@ public class SpaceshipRenderer implements Renderable{
         grphcs.setColor(Color.red);
         grphcs.pushTransform();
         grphcs.rotate(vaisseau.getCenterX(),vaisseau.getCenterY(),vaisseau.getAngle());
-        grphcs.drawRect(vaisseau.getX(), vaisseau.getY(), vaisseau.getWidth(), vaisseau.getHeight());
+        //grphcs.drawRect(vaisseau.getX(), vaisseau.getY(), vaisseau.getWidth(), vaisseau.getHeight());
         grphcs.popTransform();
     }
 }

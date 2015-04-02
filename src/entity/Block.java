@@ -153,10 +153,17 @@ public abstract class Block extends Rectangle implements Updateable, CollideList
     
     @Override
     public void detruire(Game gc){
-        //TODO
+        gc.removeObject(this);
+        gc.removeCollideListener(this);
     }
     
+    @Override
     public void Collide(Game gc, CollideListener c) {
-        
+        if(c instanceof Laser){
+            if(source==null){
+                this.detruire(gc);
+                ((Destroyable)c).detruire(gc);
+            }
+        }
     }
 }

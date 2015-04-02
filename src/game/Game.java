@@ -19,6 +19,7 @@ package game;
 import controller.Player;
 import controller.Updateable;
 import entity.Armor;
+import entity.Block;
 import entity.CollideListener;
 import entity.Meteorite;
 import entity.Reactor;
@@ -54,6 +55,8 @@ public class Game extends BasicGameState{
     private final ArrayList<CollideListener> collideListeners   = new ArrayList();
     
     private final Spaceship player = new Spaceship(Window.WIDTH/2,Window.HEIGHT/2);
+    
+    private final Spaceship test = new Spaceship(1000,1000);
     
     @Override
     public int getID() {
@@ -104,6 +107,9 @@ public class Game extends BasicGameState{
         for(Renderable r : objectsToRender){
             if(r.getObjectToRender()==u)
                 objectsSupToRender.add(r);
+            if(r instanceof SpaceshipRenderer && u instanceof Block){
+                ((SpaceshipRenderer)r).removeBlock((Block)u);
+            }
         }
     }
     
@@ -139,16 +145,22 @@ public class Game extends BasicGameState{
         player.addBlock(new Weapon(),-1,1);
         player.addBlock(new Weapon(),-1,-1);
         player.addBlock(new Armor(),1,0);
-        player.addBlock(new Armor(),2,1);
-        player.addBlock(new Armor(),2,2);
-        player.addBlock(new Armor(),2,3);
-        player.addBlock(new Armor(),2,4);
         player.addBlock(new Reactor(1f,10f),2,0);
         player.addBlock(new Armor(),1,-1);
         player.addBlock(new Armor(),1,1);
         player.initSpaceship();
         player.setCenterX(Window.WIDTH/2);
         player.setCenterY(Window.HEIGHT/2);
+        
+        for(int i=-1;i<2;i++){
+            for(int j=-1;j<2;j++){
+                test.addBlock(new Armor(), i, j);
+            }
+        }
+        test.initSpaceship();
+        test.setCenterX(Window.WIDTH/2);
+        test.setCenterY(Window.HEIGHT/2);
+        
         for(int i=0;i<100;i++){
             objectsToRender.add(new EtoileRenderer(
                     (float)Math.random()*Window.WIDTH*4-Window.WIDTH*2,
@@ -157,7 +169,7 @@ public class Game extends BasicGameState{
             );
         }
         
-        for(int i=0;i<5;i++){
+        /*for(int i=0;i<5;i++){
             Meteorite meteor = new Meteorite(
                     (float)(Math.random())*Window.WIDTH,
                     (float)(Math.random())*Window.HEIGHT,
@@ -175,12 +187,15 @@ public class Game extends BasicGameState{
             objectsToUpdate.add(meteor);
             objectsToRender.add(meteorRender);
             collideListeners.add(meteor);
-        }
+        }*/
         
         objectsToRender.add(new SpaceshipRenderer(player));
+        objectsToRender.add(new SpaceshipRenderer(test));
         objectsToUpdate.add(new Player(player));
         objectsToUpdate.add(player);
+        objectsToUpdate.add(test);
         collideListeners.add(player);
+        collideListeners.add(test);
     }
 
     @Override
