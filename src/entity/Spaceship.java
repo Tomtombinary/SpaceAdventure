@@ -321,6 +321,10 @@ public class Spaceship extends Rectangle implements Updateable, CollideListener{
                     ));
                     block.setSource(null);
                     gc.addNewObject(block, null);
+                    if(block instanceof Reactor){
+                        this.acc-=((Reactor)block).getAcc();
+                        this.max_speed-=((Reactor)block).getMax_speed();
+                    }
                     blockToRemove.add(cle);
                 }
             }
