@@ -79,12 +79,6 @@ public abstract class BlockRenderer implements Renderable{
                 objectToRender.getX()-objectToRender.getCenterX(),
                 objectToRender.getY()-objectToRender.getCenterY()
         );
-        grphcs.setColor(Color.white);
-        grphcs.drawString(
-                "( "+objectToRender.getX()+","+objectToRender.getY()+")",
-                objectToRender.getX()-objectToRender.getCenterX(),
-                objectToRender.getY()-objectToRender.getCenterY()
-        );
         grphcs.popTransform();
     }
     

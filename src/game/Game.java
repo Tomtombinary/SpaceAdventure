@@ -145,15 +145,15 @@ public class Game extends BasicGameState{
         player.setCenterX(Window.WIDTH/2);
         player.setCenterY(Window.HEIGHT/2);
         
-        for(int i=-2;i<2;i++){
-            for(int j=-2;j<2;j++){
-                test.addBlock(new Armor(), i, j);
+        for(int i=-1;i<2;i++){
+            for(int j=-1;j<2;j++){
+                test.addBlock(new Armor(), j, i);
             }
         }
         test.initSpaceship();
         test.setCenterX(Window.WIDTH/2);
         test.setCenterY(Window.HEIGHT/2);
-        
+        test.setAngle(45);
         for(int i=0;i<100;i++){
             objectsToRender.add(new EtoileRenderer(
                     (float)Math.random()*Window.WIDTH*4-Window.WIDTH*2,

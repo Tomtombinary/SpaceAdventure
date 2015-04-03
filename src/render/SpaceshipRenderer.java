@@ -78,7 +78,8 @@ public class SpaceshipRenderer implements Renderable{
         grphcs.setColor(Color.red);
         grphcs.pushTransform();
         grphcs.rotate(vaisseau.getCenterX(),vaisseau.getCenterY(),vaisseau.getAngle());
-        //grphcs.drawRect(vaisseau.getX(), vaisseau.getY(), vaisseau.getWidth(), vaisseau.getHeight());
+        grphcs.setColor(Color.red);
+        grphcs.drawRect(vaisseau.getX(), vaisseau.getY(), vaisseau.getWidth(), vaisseau.getHeight());
         grphcs.popTransform();
     }
 }

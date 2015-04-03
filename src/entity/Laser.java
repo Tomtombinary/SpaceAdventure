@@ -60,6 +60,7 @@ public class Laser extends Rectangle implements Updateable,CollideListener,Destr
                 (float)(Math.sin(Math.toRadians(angle))*speed)
         );
         this.source = source;
+        this.detruit = false;
     }
 
     
