@@ -94,15 +94,19 @@ public class Spaceship extends Rectangle implements Updateable, CollideListener{
         b.setCenterX(centreConstruction[0]+colonne*Block.WIDTH);
         b.setCenterY(centreConstruction[1]+ligne*Block.HEIGHT);
         b.setSource(this);
-        if(b.getX()<this.getX())
+        if(b.getX()<this.getX()){
             this.setX(b.getX());
-        if(b.getY()<this.getY())
-            this.setY(b.getY());
-        if((this.getX()+this.getWidth())<=b.getX())
             this.setWidth(this.getWidth()+Block.WIDTH);
-        if((this.getY()+this.getHeight())<=b.getY())
+        }
+        if(b.getY()<this.getY()){
+            this.setY(b.getY());
             this.setHeight(this.getHeight()+Block.HEIGHT);
-        
+        }
+        if((this.getWidth())<Math.abs(this.getX()-(b.getX()+Block.WIDTH)))
+            this.setWidth(this.getWidth()+Block.WIDTH);
+        if((this.getHeight())<Math.abs(this.getY()-(b.getY()+Block.HEIGHT)))
+            this.setHeight(this.getHeight()+Block.HEIGHT);
+        System.out.println("After ["+getX()+","+getY()+" "+getWidth()+"x"+getHeight()+"]");
         blocks.put(new Point(colonne*Block.WIDTH,ligne*Block.HEIGHT), b);
         if(b instanceof Reactor){
             acc+=((Reactor)b).getAcc();
