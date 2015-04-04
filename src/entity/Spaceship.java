@@ -34,6 +34,7 @@ import org.newdawn.slick.state.StateBasedGame;
 import org.newdawn.slick.util.ResourceLoader;
 import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Transform;
+import render.ExplosionRenderer;
 
 /**
  *
@@ -41,6 +42,7 @@ import org.newdawn.slick.geom.Transform;
  */
 public class Spaceship extends Rectangle implements Updateable, CollideListener{
     
+    /* Liste des blocks a supprimer */
     private final ArrayList<Point> blockToRemove = new ArrayList();
     private static Audio laserEffect;
     private boolean detruit;
@@ -228,6 +230,8 @@ public class Spaceship extends Rectangle implements Updateable, CollideListener{
                 b.setAngleSpeed((float)(Math.random()*5));
                 gc.addNewObject(b, null);
             }
+            ExplosionRenderer r = new ExplosionRenderer(this.getCenterX(),this.getCenterY(),1);
+            gc.addNewObject(r,r);
         }
     }
     

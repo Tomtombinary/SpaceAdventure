@@ -24,6 +24,7 @@ import org.newdawn.slick.geom.Transform;
 import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.state.StateBasedGame;
 import game.Game;
+import render.ExplosionRenderer;
 
 
 /**
@@ -58,7 +59,7 @@ public abstract class Block extends Rectangle implements Updateable, CollideList
     @Override
     public boolean intersects(Shape shape){
         Shape rotateBlock = this.transform(Transform.createRotateTransform((float)Math.toRadians(angle),this.getCenterX(),this.getCenterY()));
-        return rotateBlock.intersects(shape);
+        return (rotateBlock.intersects(shape) || rotateBlock.contains(shape));
     }
     
     @Override
@@ -155,6 +156,8 @@ public abstract class Block extends Rectangle implements Updateable, CollideList
     public void detruire(Game gc){
         gc.removeObject(this);
         gc.removeCollideListener(this);
+        ExplosionRenderer r = new ExplosionRenderer(this.getCenterX(),this.getCenterY(),0.5f);
+        gc.addNewObject(r,r);
     }
     
     @Override
