@@ -236,9 +236,7 @@ public class Spaceship extends Rectangle implements Updateable, CollideListener{
     }
     
     private void hitBoxCalcul(){
-       boolean summitHeight=true;
-            int coeffWidth=1;
-            int coeffHeight=1;
+            boolean summitHeight=true;
             boolean summitWidth=true;
         ///   On initialise les bornes temporaires du vaisseau    ///
             float infX=0;
@@ -290,18 +288,10 @@ public class Spaceship extends Rectangle implements Updateable, CollideListener{
                 }
                 /// On calcule les coefficient de reduction puis la reduction en elle meme ///
                 if (summitWidth){
-                   if (key.getX()>0)
-                       coeffWidth=(int)((key.getX()-supX))/32;
-                   if (key.getX()<0)
-                       coeffWidth=(int)((key.getX()-infX))/32;
-                   this.width-=32*Math.abs(coeffWidth);
+                    this.width=Math.abs(supX-infX)+32;
                 }
                 if (summitHeight){
-                   if (key.getY()>0)
-                       coeffHeight=(int)((key.getY()-supY))/32;
-                   if (key.getY()<0)
-                       coeffHeight=(int)((key.getY()-infY))/32;
-                   this.height-=32*Math.abs(coeffHeight);
+                   this.height=Math.abs(supY-infY)+32; 
                 }
                 Point falseCenter;
                 if (summitWidth || summitHeight){
@@ -317,9 +307,9 @@ public class Spaceship extends Rectangle implements Updateable, CollideListener{
                         blocksII.put(newKey ,(Block)blocks.get(actualKey));
                     }
                     blocks=blocksII;
+                    this.setCenterX(this.getCenterX()+falseCenter.getX());
+                    this.setCenterY(this.getCenterY()+falseCenter.getY());
                 }
-                coeffWidth=1;
-                coeffHeight=1;
             }
     }
     

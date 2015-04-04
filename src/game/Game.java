@@ -141,7 +141,11 @@ public class Game extends BasicGameState{
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
         player.addBlock(new Weapon(),0,0);
         player.addBlock(new Armor(),0,-1);
+        player.addBlock(new Armor(),0,-2);
+        player.addBlock(new Armor(),0,-3);
         player.addBlock(new Armor(),0,1);
+        player.addBlock(new Armor(),0,2);
+        player.addBlock(new Armor(),0,3);
         player.addBlock(new Reactor(1f,10f),1,0);
         player.initSpaceship();
         player.setCenterX(Window.WIDTH/2);
@@ -164,7 +168,7 @@ public class Game extends BasicGameState{
             );
         }
         
-        /*for(int i=0;i<5;i++){
+        for(int i=0;i<5;i++){
             Meteorite meteor = new Meteorite(
                     (float)(Math.random())*Window.WIDTH,
                     (float)(Math.random())*Window.HEIGHT,
@@ -182,7 +186,7 @@ public class Game extends BasicGameState{
             objectsToUpdate.add(meteor);
             objectsToRender.add(meteorRender);
             collideListeners.add(meteor);
-        }*/
+        }
         
         objectsToRender.add(new SpaceshipRenderer(player));
         objectsToRender.add(new SpaceshipRenderer(test));
