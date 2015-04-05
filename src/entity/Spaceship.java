@@ -242,80 +242,47 @@ public class Spaceship extends Rectangle implements Updateable, CollideListener{
     private void hitBoxCalcul(){
             float decalX = this.getCenterX();
             float decalY = this.getCenterY();
-            boolean summitHeight=true;
-            boolean summitWidth=true;
-        ///   On initialise les bornes temporaires du vaisseau    ///
-            float infX=0;
-            boolean initIx=false;
-            float supX=0;
-            boolean initSx=false;
-            float infY=0;
-            boolean initIy=false;
-            float supY=0;
-            boolean initSy=false;
-            for(Point key : blockToRemove){
-                blocks.remove(key);
-                summitHeight=true;
-                summitWidth=true;
-                Set clesII = blocks.keySet();
-                Iterator itII = clesII.iterator();
-                while (itII.hasNext()){
-                    Point cleII = (Point)itII.next();
-                    ///      On calcule la longeur a alterer       ///
-                    if ( (cleII.getX()>=key.getX()) && key.getX()>=0 ){
-                        summitWidth=false;
-                    }
-                    if ( (cleII.getX()<=key.getX()) && key.getX()<=0 ){
-                        summitWidth=false;
-                    }
-                    if ( (cleII.getY()>=key.getY()) && key.getY()>=0 ){
-                        summitHeight=false;
-                    }
-                    if ( (cleII.getY()<=key.getY()) && key.getY()<=0 ){
-                        summitHeight=false;
-                    }
-                    ///      On calcule les bornes max du rectangle        ///
-                    if ((infX==0 && initIx==false) || cleII.getX()<infX){
-                        infX=cleII.getX();
-                        initIx=true;
-                    }
-                    if ((supX==0 && initSx==false) || cleII.getX()>supX){
-                        supX=cleII.getX();
-                        initSx=true;
-                    }
-                    if ((infY==0 && initIy==false) || cleII.getY()<infY){
-                        infY=cleII.getY();
-                        initIy=true;
-                    }
-                    if ((supY==0 && initSy==false) || cleII.getY()>supY){
-                        supY=cleII.getY();
-                        initSy=true;
-                    }
+            
+            Iterator<Point> key = blocks.keySet().iterator();
+            float xmin,ymin,xmax,ymax;
+            float newX,newY,newWidth,newHeight,newCenterX,newCenterY;
+            if(key.hasNext()){
+                Point p = key.next();
+                xmin = xmax = p.getX();
+                ymin = ymax = p.getY();
+                while(key.hasNext()){
+                      p = key.next();
+                      if(p.getX()<xmin)
+                          xmin = p.getX();
+                      if(p.getY()<ymin)
+                          ymin = p.getY();
+                      if(p.getX()>xmax)
+                          xmax = p.getX();
+                      if(p.getY()>ymax)
+                          ymax = p.getY();
                 }
-                /// On calcule les coefficient de reduction puis la reduction en elle meme ///
-                if (summitWidth){
-                    this.width=Math.abs(supX-infX)+32;
+                xmin-=Block.WIDTH/2;
+                ymin-=Block.HEIGHT/2;
+                xmax+=Block.WIDTH/2;
+                ymax+=Block.HEIGHT/2;
+                newX = xmin;
+                newY = ymin;
+                newWidth = xmax-xmin;
+                newHeight= ymax-ymin;
+                newCenterX = newX+newWidth/2;
+                newCenterY = newY+newHeight/2;
+                key = blocks.keySet().iterator();
+                while(key.hasNext()){
+                    p = key.next();
+                    p.setX(p.getX()-newCenterX);
+                    p.setY(p.getY()-newCenterY);
                 }
-                if (summitHeight){
-                   this.height=Math.abs(supY-infY)+32; 
-                }
-                Point falseCenter;
-                if (summitWidth || summitHeight){
-                    ///      On calcule le centre temporaire     ///
-                    falseCenter= new Point((supX+infX)/2, (supY+infY)/2);
-                    ///   On translate tout les points selon le nouveau centre  ///
-                    Set clesIII = blocks.keySet();
-                    Iterator itIII = clesIII.iterator();
-                    Map<Point,Block> blocksII = new HashMap();
-                    while (itIII.hasNext()){
-                        Point actualKey = (Point)itIII.next();
-                        Point newKey=new Point((actualKey.getX()-falseCenter.getX()), (actualKey.getY()-falseCenter.getY()));
-                        blocksII.put(newKey ,(Block)blocks.get(actualKey));
-                    }
-                    blocks=blocksII;
-                    this.setCenterX(this.getCenterX()+falseCenter.getX());
-                    this.setCenterY(this.getCenterY()+falseCenter.getY());
-                }
+                newCenterX = (float)(newCenterX*Math.cos(Math.toRadians(angle))-Math.sin(Math.toRadians(angle))*newCenterY);
+                newCenterY = (float)(newCenterX*Math.sin(Math.toRadians(angle))+Math.cos(Math.toRadians(angle))*newCenterY);
+                this.width= newWidth;
+                this.height= newHeight;
+                this.setCenterX(decalX+newCenterX);
+                this.setCenterY(decalY+newCenterY);
             }
             decalX-=getCenterX();
             decalY-=getCenterY();

@@ -164,6 +164,7 @@ public class Game extends BasicGameState{
         test.initSpaceship();
         test.setCenterX(Window.WIDTH/2);
         test.setCenterY(Window.HEIGHT/2);
+        test.setAngle(45);
         for(int i=0;i<100;i++){
             objectsToRender.add(new EtoileRenderer(
                     (float)Math.random()*Window.WIDTH*4-Window.WIDTH*2,
@@ -204,8 +205,9 @@ public class Game extends BasicGameState{
 
     @Override
     public void render(GameContainer gc, StateBasedGame sbg, Graphics grphcs) throws SlickException {
-        //grphcs.drawLine(Window.WIDTH/2,0,Window.WIDTH/2,Window.HEIGHT);
-        //grphcs.drawLine(0,Window.HEIGHT/2,Window.WIDTH,Window.HEIGHT/2);
+        grphcs.setColor(Color.white);
+        grphcs.drawLine(Window.WIDTH/2,0,Window.WIDTH/2,Window.HEIGHT);
+        grphcs.drawLine(0,Window.HEIGHT/2,Window.WIDTH,Window.HEIGHT/2);
         grphcs.translate(camera.getTx(),camera.getTy());
         for(Renderable r : objectsToRender)
             r.render(gc, sbg, grphcs);
