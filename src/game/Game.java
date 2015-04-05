@@ -57,7 +57,7 @@ public class Game extends BasicGameState{
     private final ArrayList<CollideListener> collideListeners   = new ArrayList();
     
     private final Spaceship player = new Spaceship(Window.WIDTH/2,Window.HEIGHT/2);
-    
+    private final Player controller= new Player(player);
     private final Spaceship test = new Spaceship(1000,1000);
     private Camera camera;
     
@@ -154,6 +154,7 @@ public class Game extends BasicGameState{
         player.setCenterX(Window.WIDTH/2);
         player.setCenterY(Window.HEIGHT/2);
         camera = new Camera(player);
+        player.setCenterListener(camera);
         
         test.addBlock(new Weapon(),0,0);
         test.addBlock(new Armor(),0,-1);
@@ -193,16 +194,18 @@ public class Game extends BasicGameState{
         
         objectsToRender.add(new SpaceshipRenderer(player));
         objectsToRender.add(new SpaceshipRenderer(test));
-        objectsToUpdate.add(new Player(player));
         objectsToUpdate.add(player);
         objectsToUpdate.add(camera);
         objectsToUpdate.add(test);
         collideListeners.add(player);
         collideListeners.add(test);
+        objectsToUpdate.add(controller);
     }
 
     @Override
     public void render(GameContainer gc, StateBasedGame sbg, Graphics grphcs) throws SlickException {
+        //grphcs.drawLine(Window.WIDTH/2,0,Window.WIDTH/2,Window.HEIGHT);
+        //grphcs.drawLine(0,Window.HEIGHT/2,Window.WIDTH,Window.HEIGHT/2);
         grphcs.translate(camera.getTx(),camera.getTy());
         for(Renderable r : objectsToRender)
             r.render(gc, sbg, grphcs);

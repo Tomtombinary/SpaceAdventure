@@ -15,6 +15,7 @@
  */
 package controller;
 
+import entity.CenterListener;
 import entity.Spaceship;
 import game.Window;
 import org.newdawn.slick.GameContainer;
@@ -26,8 +27,13 @@ import org.newdawn.slick.state.StateBasedGame;
  *
  * @author thomas
  */
-public class Camera implements Updateable{
+public class Camera implements Updateable,CenterListener{
 
+    private float decalX;
+    private float decalY;
+    
+    private float diffx;
+    private float diffy;
     private float tx;
     private float ty;
     private Vector2f vitesse;
@@ -40,8 +46,10 @@ public class Camera implements Updateable{
     
     @Override
     public void update(GameContainer gc, StateBasedGame sbg, int i) throws SlickException {
-        this.tx-=vitesse.x;
-        this.ty-=vitesse.y;
+        this.tx-=vitesse.x-decalX*0.01;
+        this.ty-=vitesse.y-decalY*0.01;
+        decalX*=0.99;
+        decalY*=0.99;
     }
 
     /**
@@ -56,6 +64,12 @@ public class Camera implements Updateable{
      */
     public float getTy() {
         return ty;
+    }
+
+    @Override
+    public void centerChange(float decalX, float decalY) {
+        this.decalX += decalX;
+        this.decalY += decalY;
     }
     
 }

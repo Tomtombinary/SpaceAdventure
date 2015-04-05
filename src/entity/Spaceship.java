@@ -55,6 +55,7 @@ public class Spaceship extends Rectangle implements Updateable, CollideListener{
     private float angle;
     private Vector2f vitesse;
     private Map<Point,Block> blocks = new HashMap();
+    private CenterListener listener;
     /**
      * Créer un vaisseau avec pour centre TEMPORAIRE centre_x,centre_y
      * @param center_x
@@ -80,6 +81,9 @@ public class Spaceship extends Rectangle implements Updateable, CollideListener{
         this.max_speed = 0;
     }
 
+    public void setCenterListener(CenterListener listener){
+        this.listener = listener;
+    }
     /**
      * Ajoute un block au vaisseau, celui-ci se positionne automatiquement
      * en fonction de la ligne , et de la colonne par rapport au centre du vaisseau
@@ -236,6 +240,8 @@ public class Spaceship extends Rectangle implements Updateable, CollideListener{
     }
     
     private void hitBoxCalcul(){
+            float decalX = this.getCenterX();
+            float decalY = this.getCenterY();
             boolean summitHeight=true;
             boolean summitWidth=true;
         ///   On initialise les bornes temporaires du vaisseau    ///
@@ -311,6 +317,9 @@ public class Spaceship extends Rectangle implements Updateable, CollideListener{
                     this.setCenterY(this.getCenterY()+falseCenter.getY());
                 }
             }
+            decalX-=getCenterX();
+            decalY-=getCenterY();
+            if(listener!=null)this.listener.centerChange(decalX,decalY);
     }
     
     @Override
@@ -369,8 +378,8 @@ public class Spaceship extends Rectangle implements Updateable, CollideListener{
                 if(block.intersects((Shape)c)){
                     block.setAngleSpeed((float)(Math.random()*5));
                     block.setDeplacement(new Vector2f(
-                           (float)(getCenterX()-((Shape)c).getCenterX())*0.05f,
-                           (float)(getCenterY()-((Shape)c).getCenterY())*0.05f
+                           (float)(getCenterX()-((Shape)c).getCenterX())*0.01f,
+                           (float)(getCenterY()-((Shape)c).getCenterY())*0.01f
                     ));
                     block.setSource(null);
                     gc.addNewObject(block, null);
@@ -389,7 +398,7 @@ public class Spaceship extends Rectangle implements Updateable, CollideListener{
             }
             for(Point key : blockToRemove)
                 blocks.remove(key);
-            hitBoxCalcul();
+            if(blockToRemove.size()>0)hitBoxCalcul();
             blockToRemove.clear();
         }
     }
