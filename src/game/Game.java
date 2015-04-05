@@ -16,6 +16,7 @@
 package game;
 
 // C'est Joli
+import controller.Camera;
 import controller.Player;
 import controller.Updateable;
 import entity.Armor;
@@ -26,6 +27,7 @@ import entity.Reactor;
 import entity.Spaceship;
 import entity.Weapon;
 import java.util.ArrayList;
+import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
@@ -57,6 +59,7 @@ public class Game extends BasicGameState{
     private final Spaceship player = new Spaceship(Window.WIDTH/2,Window.HEIGHT/2);
     
     private final Spaceship test = new Spaceship(1000,1000);
+    private Camera camera;
     
     @Override
     public int getID() {
@@ -150,7 +153,7 @@ public class Game extends BasicGameState{
         player.initSpaceship();
         player.setCenterX(Window.WIDTH/2);
         player.setCenterY(Window.HEIGHT/2);
-        
+        camera = new Camera(player);
         
         test.addBlock(new Weapon(),0,0);
         test.addBlock(new Armor(),0,-1);
@@ -192,6 +195,7 @@ public class Game extends BasicGameState{
         objectsToRender.add(new SpaceshipRenderer(test));
         objectsToUpdate.add(new Player(player));
         objectsToUpdate.add(player);
+        objectsToUpdate.add(camera);
         objectsToUpdate.add(test);
         collideListeners.add(player);
         collideListeners.add(test);
@@ -199,7 +203,7 @@ public class Game extends BasicGameState{
 
     @Override
     public void render(GameContainer gc, StateBasedGame sbg, Graphics grphcs) throws SlickException {
-        grphcs.translate(Window.WIDTH/2-player.getCenterX(),Window.HEIGHT/2-player.getCenterY());
+        grphcs.translate(camera.getTx(),camera.getTy());
         for(Renderable r : objectsToRender)
             r.render(gc, sbg, grphcs);
     }

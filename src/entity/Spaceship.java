@@ -224,8 +224,8 @@ public class Spaceship extends Rectangle implements Updateable, CollideListener{
                 Block b = (Block)blocks.get(p);
                 b.setSource(null);
                 b.setDeplacement(new Vector2f(
-                        vitesse.x+(float)((b.getCenterX()-this.getCenterX()+1)*(Math.random()*0.10f)),
-                        vitesse.y+(float)((b.getCenterY()-this.getCenterY()+1)*(Math.random()*0.10f))
+                        getVitesse().x+(float)((b.getCenterX()-this.getCenterX()+1)*(Math.random()*0.10f)),
+                        getVitesse().y+(float)((b.getCenterY()-this.getCenterY()+1)*(Math.random()*0.10f))
                 ));
                 b.setAngleSpeed((float)(Math.random()*5));
                 gc.addNewObject(b, null);
@@ -319,8 +319,8 @@ public class Spaceship extends Rectangle implements Updateable, CollideListener{
             current_speed*=deceleration;
             vitesse.x = (float)Math.cos(Math.toRadians(angle-90))*getCurrent_speed();
             vitesse.y = (float)Math.sin(Math.toRadians(angle-90))*getCurrent_speed();
-            this.setCenterX(this.getCenterX()+vitesse.getX());
-            this.setCenterY(this.getCenterY()+vitesse.getY());
+            this.setCenterX(this.getCenterX()+getVitesse().getX());
+            this.setCenterY(this.getCenterY()+getVitesse().getY());
             updateBlocks();
         }
     }
@@ -397,5 +397,12 @@ public class Spaceship extends Rectangle implements Updateable, CollideListener{
     @Override
     public String toString(){
         return "Rectangle : width : "+this.width+" height : "+height+" ("+center[0]+","+center[1]+")"+"("+x+","+y+")";
+    }
+
+    /**
+     * @return the vitesse
+     */
+    public Vector2f getVitesse() {
+        return vitesse;
     }
 }
