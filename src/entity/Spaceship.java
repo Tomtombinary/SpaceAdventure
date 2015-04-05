@@ -236,7 +236,81 @@ public class Spaceship extends Rectangle implements Updateable, CollideListener{
     }
     
     private void hitBoxCalcul(){
-        
+            boolean summitHeight=true;
+            boolean summitWidth=true;
+        ///   On initialise les bornes temporaires du vaisseau    ///
+            float infX=0;
+            boolean initIx=false;
+            float supX=0;
+            boolean initSx=false;
+            float infY=0;
+            boolean initIy=false;
+            float supY=0;
+            boolean initSy=false;
+            for(Point key : blockToRemove){
+                blocks.remove(key);
+                summitHeight=true;
+                summitWidth=true;
+                Set clesII = blocks.keySet();
+                Iterator itII = clesII.iterator();
+                while (itII.hasNext()){
+                    Point cleII = (Point)itII.next();
+                    ///      On calcule la longeur a alterer       ///
+                    if ( (cleII.getX()>=key.getX()) && key.getX()>=0 ){
+                        summitWidth=false;
+                    }
+                    if ( (cleII.getX()<=key.getX()) && key.getX()<=0 ){
+                        summitWidth=false;
+                    }
+                    if ( (cleII.getY()>=key.getY()) && key.getY()>=0 ){
+                        summitHeight=false;
+                    }
+                    if ( (cleII.getY()<=key.getY()) && key.getY()<=0 ){
+                        summitHeight=false;
+                    }
+                    ///      On calcule les bornes max du rectangle        ///
+                    if ((infX==0 && initIx==false) || cleII.getX()<infX){
+                        infX=cleII.getX();
+                        initIx=true;
+                    }
+                    if ((supX==0 && initSx==false) || cleII.getX()>supX){
+                        supX=cleII.getX();
+                        initSx=true;
+                    }
+                    if ((infY==0 && initIy==false) || cleII.getY()<infY){
+                        infY=cleII.getY();
+                        initIy=true;
+                    }
+                    if ((supY==0 && initSy==false) || cleII.getY()>supY){
+                        supY=cleII.getY();
+                        initSy=true;
+                    }
+                }
+                /// On calcule les coefficient de reduction puis la reduction en elle meme ///
+                if (summitWidth){
+                    this.width=Math.abs(supX-infX)+32;
+                }
+                if (summitHeight){
+                   this.height=Math.abs(supY-infY)+32; 
+                }
+                Point falseCenter;
+                if (summitWidth || summitHeight){
+                    ///      On calcule le centre temporaire     ///
+                    falseCenter= new Point((supX+infX)/2, (supY+infY)/2);
+                    ///   On translate tout les points selon le nouveau centre  ///
+                    Set clesIII = blocks.keySet();
+                    Iterator itIII = clesIII.iterator();
+                    Map<Point,Block> blocksII = new HashMap();
+                    while (itIII.hasNext()){
+                        Point actualKey = (Point)itIII.next();
+                        Point newKey=new Point((actualKey.getX()-falseCenter.getX()), (actualKey.getY()-falseCenter.getY()));
+                        blocksII.put(newKey ,(Block)blocks.get(actualKey));
+                    }
+                    blocks=blocksII;
+                    this.setCenterX(this.getCenterX()+falseCenter.getX());
+                    this.setCenterY(this.getCenterY()+falseCenter.getY());
+                }
+            }
     }
     
     @Override
@@ -315,8 +389,8 @@ public class Spaceship extends Rectangle implements Updateable, CollideListener{
             }
             for(Point key : blockToRemove)
                 blocks.remove(key);
-            blockToRemove.clear();
             hitBoxCalcul();
+            blockToRemove.clear();
         }
     }
     
